@@ -49,11 +49,12 @@ impl Maze {
     }
 
     pub fn print(&self) {
-        println!("╔{}╗", (vec!["═".to_string(); self.size]).join("╦"));
+        println!("╔{}╗", (vec!["══".to_string(); self.size]).join("╦"));
         for y in 0..self.size {
             let mut l = String::new();
             l.push('║');
             for x in 0..self.size {
+                l.push(' ');
                 l.push(' ');
                 if self.maze[y][x] & Walls::Right as i8 == 0 {
                     l.push(' ');
@@ -66,7 +67,9 @@ impl Maze {
             for x in 0..self.size {
                 if self.maze[y][x] & Walls::Down as i8 == 0 {
                     l2.push(' ');
+                    l2.push(' ');
                 } else {
+                    l2.push('═');
                     l2.push('═');
                 }
                 l2.push('╬');
