@@ -146,6 +146,16 @@ impl Maze {
          ' ', '╗', '╝', '╣', '═', '╦', '╩', '╬'][lookup as usize]
     }
 
+
+    pub fn get_adjacent(&self, x: usize, y: usize) -> Vec<(usize, usize, Walls)> {
+        let mut v = vec![];
+        if x > 0 { v.push((x - 1, y, Walls::Left)); }
+        if y > 0 { v.push((x, y - 1, Walls::Up)); }
+        if x + 1 < self.size { v.push((x + 1, y, Walls::Right)); }
+        if y + 1 < self.size { v.push((x, y + 1, Walls::Down)); }
+        v
+    }
+
     pub fn rm_wall(&mut self, x: usize, y: usize, w: Walls) {
         self.maze[y][x] &= !(w as i8);
     }
