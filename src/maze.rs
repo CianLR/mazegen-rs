@@ -69,10 +69,10 @@ impl Maze {
 
     pub fn print(&self) {
         // Top row
-        let mut top = "╔══".to_string();
+        let mut top = "╔═══".to_string();
         for x in 0..(self.size - 1) {
             top.push_str(if Walls::right(self.maze[0][x]) { "╦" } else { "═" });
-            top.push_str("══");
+            top.push_str("═══");
         }
         top.push('╗');
         println!("{}", top);
@@ -82,16 +82,17 @@ impl Maze {
             println!("{}", self.get_cell_row(y));
             // Horizontal border
             let mut horz = if Walls::down(self.maze[y][0]) {
-                    "╠══".to_string()
+                    "╠═══".to_string()
                 } else {
-                    "║  ".to_string()
+                    "║   ".to_string()
                 };
             for x in 1..self.size {
                 horz.push(
                     Maze::get_inner_junction(
                         self.maze[y][x - 1],
                         self.maze[y + 1][x]));
-                horz.push_str(if Walls::down(self.maze[y][x]) {"══"} else {"  "});
+                horz.push_str(
+                    if Walls::down(self.maze[y][x]) {"═══"} else {"   "});
             }
             horz.push(
                 if Walls::down(self.maze[y][self.size - 1]) {'╣'} else {'║'});
@@ -99,7 +100,7 @@ impl Maze {
         }
         println!("{}", self.get_cell_row(self.size - 1));
         // Final line
-        let mut bot = "╚══".to_string();
+        let mut bot = "╚═══".to_string();
         for x in 0..(self.size - 1) {
             bot.push_str(
                 if Walls::right(self.maze[self.size - 1][x]) {
@@ -107,17 +108,17 @@ impl Maze {
                 } else {
                     "═"
                 });
-            bot.push_str("══");
+            bot.push_str("═══");
         }
         bot.push('╝');
         println!("{}", bot);
     }
 
     fn get_cell_row(&self, y: usize) -> String {
-        let mut row = "║  ".to_string();
+        let mut row = "║   ".to_string();
         for x in 0..(self.size - 1) {
            row.push(if Walls::right(self.maze[y][x]) {'║'} else {' '});
-           row.push_str("  ");
+           row.push_str("   ");
         }
         row.push('║');
         row
