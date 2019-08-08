@@ -7,14 +7,33 @@ pub enum Walls {
     Down  = 1 << 3,
 }
 
-pub fn wall_opposite(w: Walls) -> Walls {
-    match w {
-        Walls::Left => Walls::Right,
-        Walls::Right => Walls::Left,
-        Walls::Up => Walls::Down,
-        Walls::Down => Walls::Up,
+impl Walls {
+    fn left(v: i8) -> bool {
+        v & Walls::Left as i8 != 0
+    }
+
+    fn right(v: i8) -> bool {
+        v & Walls::Right as i8 != 0
+    }
+
+    fn up(v: i8) -> bool {
+        v & Walls::Up as i8 != 0
+    }
+
+    fn down(v: i8) -> bool {
+        v & Walls::Down as i8 != 0
+    }
+
+    pub fn opposite(&self) -> Walls {
+        match *self {
+            Walls::Left => Walls::Right,
+            Walls::Right => Walls::Left,
+            Walls::Up => Walls::Down,
+            Walls::Down => Walls::Up,
+        }
     }
 }
+
 
 pub struct Maze {
     size: usize,
@@ -49,53 +68,85 @@ impl Maze {
     }
 
     pub fn print(&self) {
-        println!("╔{}╗", (vec!["══".to_string(); self.size]).join("╦"));
-        for y in 0..self.size {
-            let mut l = String::new();
-            l.push('║');
-            for x in 0..self.size {
-                l.push(' ');
-                l.push(' ');
-                if self.maze[y][x] & Walls::Right as i8 == 0 {
-                    l.push(' ');
-                } else {
-                    l.push('║');
-                }
-            }
-            println!("{}", l);
-            let mut l2 = String::new();
-            for x in 0..self.size {
-                if self.maze[y][x] & Walls::Down as i8 == 0 {
-                    l2.push(' ');
-                    l2.push(' ');
-                    l2.push('╠');
-                } else {
-                    l2.push('═');
-                    l2.push('═');
-                    l2.push('╬');
-                }
-            }
-            println!("╠{}", l2);
+        // Top row
+        let mut top = "╔══".to_string();
+        for x in 0..(self.size - 1) {
+            top.push_str(if Walls::right(self.maze[0][x]) { "╦" } else { "═" });
+            top.push_str("══");
         }
+        top.push('╗');
+        println!("{}", top);
+        // Middle rows
+        for y in 0..(self.size - 1) {
+            // Row
+            println!("{}", self.get_cell_row(y));
+            // Horizontal border
+            let mut horz = if Walls::down(self.maze[y][0]) {
+                    "╠══".to_string()
+                } else {
+                    "║  ".to_string()
+                };
+            for x in 1..self.size {
+                horz.push(
+                    Maze::get_inner_junction(
+                        self.maze[y][x - 1],
+                        self.maze[y + 1][x]));
+                horz.push_str(if Walls::down(self.maze[y][x]) {"══"} else {"  "});
+            }
+            horz.push(
+                if Walls::down(self.maze[y][self.size - 1]) {'╣'} else {'║'});
+            println!("{}", horz);
+        }
+        println!("{}", self.get_cell_row(self.size - 1));
+        // Final line
+        let mut bot = "╚══".to_string();
+        for x in 0..(self.size - 1) {
+            bot.push_str(
+                if Walls::right(self.maze[self.size - 1][x]) {
+                    "╩"
+                } else {
+                    "═"
+                });
+            bot.push_str("══");
+        }
+        bot.push('╝');
+        println!("{}", bot);
     }
 
-    pub fn debug_print(&self) {
-        println!("Print!");
-        for line in &self.maze {
-            println!("{:?}", line);
+    fn get_cell_row(&self, y: usize) -> String {
+        let mut row = "║  ".to_string();
+        for x in 0..(self.size - 1) {
+           row.push(if Walls::right(self.maze[y][x]) {'║'} else {' '});
+           row.push_str("  ");
         }
+        row.push('║');
+        row
     }
 
-    pub fn add_wall(&mut self, x: usize, y: usize, w: Walls) {
-        self.maze[y][x] |= w as i8;
+    fn get_inner_junction(a: i8, d: i8) -> char {
+        // The inner junction is the piece connecting four squares of a maze.
+        // a b
+        //  ?
+        // c d
+        //
+        // The ? can be one of ╣, ╦, ╔, ... depending on the walls between
+        // each of the cells. Because every cell stores all of its walls we
+        // can determine which junction to use based on the down and right
+        // of 'a' and the up and left of 'd' in the diagram
+        //
+        // Because the cells are bit vectors and there's no overlap of the
+        // bits needed from 'a' or 'd' we can combine them into a single
+        // i8 and use that as a lookup. Note this will break if the values
+        // in the enum change. (Is this bad practice? Feels like it).
+        let lookup: i8 =
+            (a & (Walls::Down as i8 | Walls::Right as i8)) |
+            (d & (Walls::Up as i8 | Walls::Left as i8));
+        [' ', ' ', ' ', '║', ' ', '╔', '╚', '╠',
+         ' ', '╗', '╝', '╣', '═', '╦', '╩', '╬'][lookup as usize]
     }
 
     pub fn rm_wall(&mut self, x: usize, y: usize, w: Walls) {
         self.maze[y][x] &= !(w as i8);
-    }
-
-    pub fn get_cell(&self, x: usize, y: usize) -> i8 {
-        self.maze[y][x]
     }
 }
 

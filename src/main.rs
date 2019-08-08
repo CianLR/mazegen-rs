@@ -23,13 +23,10 @@ impl fmt::Display for MazeError {
 
 fn main() -> Result<(), String> {
     let args: Vec<String> = env::args().collect();
-    println!("Hello, world!");
-    println!("{:?}", args.len());
     if args.len() <= 1 {
         return Err("Oh crap".to_string());
     }
     let mut m = maze::Maze::new(args[1].as_str().parse::<usize>().unwrap());
-    m.print();
     algos::dfs::DfsAlgo::generate(&mut m)?;
     m.print();
     Ok(())

@@ -1,7 +1,7 @@
 use rand::prelude::*;
 
 use crate::algos::algo;
-use crate::maze::{Maze, Walls, wall_opposite};
+use crate::maze::{Maze, Walls};
 
 pub struct DfsAlgo;
 
@@ -19,7 +19,7 @@ impl DfsAlgo {
                 continue;
             }
             maze.rm_wall(x, y, d);
-            maze.rm_wall(nx, ny, wall_opposite(d));
+            maze.rm_wall(nx, ny, d.opposite());
             visited[nx][ny] = true;
             DfsAlgo::dfs(maze, visited, sz, nx, ny)?;
         }
