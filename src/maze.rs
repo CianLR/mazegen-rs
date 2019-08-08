@@ -68,11 +68,12 @@ impl Maze {
                 if self.maze[y][x] & Walls::Down as i8 == 0 {
                     l2.push(' ');
                     l2.push(' ');
+                    l2.push('╠');
                 } else {
                     l2.push('═');
                     l2.push('═');
+                    l2.push('╬');
                 }
-                l2.push('╬');
             }
             println!("╠{}", l2);
         }

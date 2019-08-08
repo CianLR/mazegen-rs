@@ -5,20 +5,45 @@ use crate::maze::{Maze, Walls, wall_opposite};
 
 pub struct DfsAlgo;
 
+// TODO: Get a way better random func
 fn rand_num(mx: u64) -> u64 {
     let t = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)
         .unwrap()
-        .as_secs();
-    t % mx
+        .as_millis();
+    let a = (t % 100007) % mx as u128;
+    a as u64
 }
 
-fn random_order<T>(v: &mut Vec<T>) -> Vec<T> {
-    let mut nv = vec![];
-    while !v.is_empty() {
-        nv.push(v.remove(rand_num(v.len() as u64) as usize));
+fn get_adjacent(sz: usize, x: usize, y: usize) -> Vec<(usize, usize, Walls)> {
+    let mut v = vec![];
+    if x > 0 { v.push((x - 1, y, Walls::Left)); }
+    if y > 0 { v.push((x, y - 1, Walls::Up)); }
+    if x + 1 < sz { v.push((x + 1, y, Walls::Right)); }
+    if y + 1 < sz { v.push((x, y + 1, Walls::Down)); }
+    v
+}
+
+impl DfsAlgo {
+    fn dfs(maze: &mut Maze, visited: &mut Vec<Vec<bool>>,
+           sz: usize, x: usize, y: usize) -> Result<(), String> {
+        let mut adj: Vec<(usize, usize, Walls)> = get_adjacent(sz, x, y)
+            .iter()
+            .filter(| (nx, ny, _) | !visited[*nx][*ny])
+            .map(| p | *p)
+            .collect::<Vec<(usize, usize, Walls)>>();
+        while !adj.is_empty() {
+            let (nx, ny, d) = adj.remove(rand_num(adj.len() as u64) as usize);
+            if visited[nx][ny] {
+                continue;
+            }
+            maze.rm_wall(x, y, d);
+            maze.rm_wall(nx, ny, wall_opposite(d));
+            visited[nx][ny] = true;
+            DfsAlgo::dfs(maze, visited, sz, nx, ny)?;
+        }
+        Ok(())
     }
-    nv
 }
 
 impl algo::MazeAlgo for DfsAlgo {
@@ -26,40 +51,7 @@ impl algo::MazeAlgo for DfsAlgo {
         maze.fill_walls();
         let size = maze.get_size();
         let mut visited = vec![vec![false; size]; size];
-        visited[0][0] = true;
-        let mut stack = vec![(0_usize, 0_usize, 0_usize, 0_usize, Walls::Up)];
-        while !stack.is_empty() {
-            let (x, y, xl, yl, w) = stack.pop().unwrap();
-            println!("At coords {}, {}", x, y);
-            // Mark walls
-            if x != xl || y != yl {
-                maze.rm_wall(xl, yl, w);
-                maze.rm_wall(x, y, wall_opposite(w));
-            }
-            // Gather neighbours
-            let mut neighbours = vec![];
-            if x > 0 && !visited[x - 1][y] {
-                neighbours.push((x - 1, y, x, y, Walls::Left));
-                visited[x - 1][y] = true;
-            }
-            if y > 0 && !visited[x][y - 1] {
-                neighbours.push((x, y - 1, x, y, Walls::Up));
-                visited[x][y - 1] = true;
-            }
-            if x + 1 < size && !visited[x + 1][y] {
-                neighbours.push((x + 1, y, x, y, Walls::Right));
-                visited[x + 1][y] = true;
-            }
-            if y + 1 < size && !visited[x][y + 1] {
-                neighbours.push((x, y + 1, x, y, Walls::Down));
-                visited[x][y + 1] = true;
-            }
-            // TODO(CianLR): Randomise order.
-            //stack.extend(random_order(&mut neighbours))
-            stack.extend(neighbours);
-            stack = random_order(&mut stack);
-        }
-        Ok(())
+        visited[size/2][size/2] = true;
+        DfsAlgo::dfs(maze, &mut visited, size, size/2, size/2)
     }
 }
-
