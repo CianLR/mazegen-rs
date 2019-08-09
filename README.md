@@ -4,6 +4,7 @@ This project is built in rust and aims to generate mazes using a variety of meth
 
  - Depth First Search
  - Kruskal's Algorithm
+ - Wilson's Algorithm
 
 ## Building
 

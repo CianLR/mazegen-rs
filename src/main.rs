@@ -16,6 +16,7 @@ fn apply_algo(alg: &String, mut maze: &mut Maze) -> Result<(), String> {
     match alg.as_ref() {
         "dfs" => algos::dfs::DfsAlgo::generate(&mut maze),
         "kruskals" => algos::kruskals::KruskalsAlgo::generate(&mut maze),
+        "wilsons" => algos::wilsons::WilsonsAlgo::generate(&mut maze),
         _ => Err("Algorithm not found".to_string()),
     }
 }
