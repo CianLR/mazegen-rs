@@ -1,33 +1,42 @@
-use std::env;
-use std::error::Error;
-use std::fmt;
-
 mod algos;
-use crate::algos::algo::MazeAlgo;
 mod maze;
 
-#[derive(Debug)]
-struct MazeError;
+use algos::algo::MazeAlgo;
+use maze::Maze;
 
-impl Error for MazeError {
-    fn description(&self) -> &str {
-        "Error in the maze"
+//fn get_algo(alg: &String) -> Result<impl MazeAlgo, String> {
+//    match alg.as_ref() {
+//        "dfs" => Ok(algos::dfs::DfsAlgo),
+//        "kruskals" => Ok(algos::kruskals::KruskalsAlgo),
+//        _ => Err("Algorithm not found".to_string()),
+//    }
+//}
+
+fn apply_algo(alg: &String, mut maze: &mut Maze) -> Result<(), String> {
+    match alg.as_ref() {
+        "dfs" => algos::dfs::DfsAlgo::generate(&mut maze),
+        "kruskals" => algos::kruskals::KruskalsAlgo::generate(&mut maze),
+        _ => Err("Algorithm not found".to_string()),
     }
 }
 
-impl fmt::Display for MazeError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Error in the maze")
-    }
+fn get_maze(size: &String) -> Result<Maze, String> {
+    let sz = match size.as_str().parse::<usize>() {
+       Err(_) => Err("Couldn't parse size".to_string()),
+       Ok(r) => Ok(r),
+    }?;
+    Ok(Maze::new(sz))
 }
 
 fn main() -> Result<(), String> {
-    let args: Vec<String> = env::args().collect();
-    if args.len() <= 1 {
-        return Err("Oh crap".to_string());
+    let args: Vec<String> = std::env::args().collect();
+    if args.len() <= 2 {
+        return Err("Usage: mazegen <algorithm> <size>".to_string());
     }
-    let mut m = maze::Maze::new(args[1].as_str().parse::<usize>().unwrap());
-    algos::dfs::DfsAlgo::generate(&mut m)?;
+    //let alg = get_algo(&args[1])?;
+    let mut m = get_maze(&args[2])?;
+    //alg::generate(&mut m);
+    apply_algo(&args[1], &mut m)?;
     m.print();
     Ok(())
 }
