@@ -4,19 +4,12 @@ mod maze;
 use algos::algo::MazeAlgo;
 use maze::Maze;
 
-//fn get_algo(alg: &String) -> Result<impl MazeAlgo, String> {
-//    match alg.as_ref() {
-//        "dfs" => Ok(algos::dfs::DfsAlgo),
-//        "kruskals" => Ok(algos::kruskals::KruskalsAlgo),
-//        _ => Err("Algorithm not found".to_string()),
-//    }
-//}
-
 fn apply_algo(alg: &String, mut maze: &mut Maze) -> Result<(), String> {
     match alg.as_ref() {
         "dfs" => algos::dfs::DfsAlgo::generate(&mut maze),
         "kruskals" => algos::kruskals::KruskalsAlgo::generate(&mut maze),
         "wilsons" => algos::wilsons::WilsonsAlgo::generate(&mut maze),
+        "ellers" => algos::ellers::EllersAlgo::generate(&mut maze),
         _ => Err("Algorithm not found".to_string()),
     }
 }
