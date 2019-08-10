@@ -33,7 +33,6 @@ impl PrimsAlgo {
 
 impl algo::MazeAlgo for PrimsAlgo {
     fn generate(maze: &mut Maze) -> Result<(), String> {
-        maze.fill_walls();
         PrimsAlgo::prims(maze)
     }
 }

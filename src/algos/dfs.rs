@@ -28,7 +28,6 @@ impl DfsAlgo {
 
 impl algo::MazeAlgo for DfsAlgo {
     fn generate(maze: &mut Maze) -> Result<(), String> {
-        maze.fill_walls();
         let size = maze.get_size();
         let mut visited = vec![vec![false; size]; size];
         visited[size/2][size/2] = true;

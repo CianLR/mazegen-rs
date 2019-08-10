@@ -42,25 +42,10 @@ pub struct Maze {
 
 impl Maze {
     pub fn new(size: usize) -> Maze {
-        let mut m = vec![vec![0; size]; size];
-        // Fill in edges of maze.
-        for i in 0..size {
-            m[i][0]        |= Walls::Left as i8;
-            m[i][size - 1] |= Walls::Right as i8;
-            m[0][i]        |= Walls::Up as i8;
-            m[size - 1][i] |= Walls::Down as i8;
-        }
+        let all_walls = Walls::Up as i8 | Walls::Down as i8 |
+                        Walls::Left as i8 | Walls::Right as i8;
+        let m = vec![vec![all_walls; size]; size];
         Maze { size: size, maze: m }
-    }
-
-    pub fn fill_walls(&mut self) {
-        for i in 0..self.size {
-            for j in 0..self.size {
-                self.maze[i][j] =
-                    Walls::Up as i8 | Walls::Down as i8 |
-                    Walls::Left as i8 | Walls::Right as i8;
-            }
-        }
     }
 
     pub fn get_size(&self) -> usize {

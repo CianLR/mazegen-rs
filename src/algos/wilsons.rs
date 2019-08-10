@@ -68,7 +68,6 @@ impl WilsonsAlgo {
 
 impl algo::MazeAlgo for WilsonsAlgo {
     fn generate(maze: &mut Maze) -> Result<(), String> {
-        maze.fill_walls();
         WilsonsAlgo::wilsons(maze)
     }
 }

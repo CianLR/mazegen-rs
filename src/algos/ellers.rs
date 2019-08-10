@@ -106,7 +106,6 @@ impl EllersAlgo {
 
 impl algo::MazeAlgo for EllersAlgo {
     fn generate(maze: &mut Maze) -> Result<(), String> {
-        maze.fill_walls();
         EllersAlgo::ellers(maze)
     }
 }
