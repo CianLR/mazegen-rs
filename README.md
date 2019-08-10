@@ -6,6 +6,7 @@ This project is built in rust and aims to generate mazes using a variety of meth
  - Kruskal's Algorithm
  - Wilson's Algorithm
  - Eller's Algorithm
+ - Prim's Algorithm
 
 ## Building
 

@@ -10,6 +10,7 @@ fn apply_algo(alg: &String, mut maze: &mut Maze) -> Result<(), String> {
         "kruskals" => algos::kruskals::KruskalsAlgo::generate(&mut maze),
         "wilsons" => algos::wilsons::WilsonsAlgo::generate(&mut maze),
         "ellers" => algos::ellers::EllersAlgo::generate(&mut maze),
+        "prims" => algos::prims::PrimsAlgo::generate(&mut maze),
         _ => Err("Algorithm not found".to_string()),
     }
 }
