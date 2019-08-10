@@ -14,12 +14,11 @@ impl DfsAlgo {
             .collect::<Vec<(usize, usize, Walls)>>();
         adj.shuffle(&mut rand::thread_rng());
         while !adj.is_empty() {
-            let (nx, ny, d) = adj.pop().unwrap();
+            let (nx, ny, _d) = adj.pop().unwrap();
             if visited[nx][ny] {
                 continue;
             }
-            maze.rm_wall(x, y, d);
-            maze.rm_wall(nx, ny, d.opposite());
+            maze.remove_wall(x, y, nx, ny);
             visited[nx][ny] = true;
             DfsAlgo::dfs(maze, visited, nx, ny)?;
         }

@@ -4,7 +4,7 @@ use std::cmp::max;
 use rand::prelude::*;
 
 use crate::algos::algo;
-use crate::maze::{Maze, Walls};
+use crate::maze::Maze;
 
 
 pub struct EllersAlgo;
@@ -33,8 +33,7 @@ impl EllersAlgo {
         for x in 0..(size - 1) {
             if curr[x] != curr[x + 1] {
                 EllersAlgo::vector_replace(curr, curr[x + 1], curr[x]);
-                maze.rm_wall(x, size - 1, Walls::Right);
-                maze.rm_wall(x + 1, size - 1, Walls::Left);
+                maze.remove_wall(x, size - 1, x + 1, size - 1);
             }
         }
     }
@@ -49,8 +48,7 @@ impl EllersAlgo {
                 // Maybe join (2 / 3 chance).
                 if rng.gen_range(0, 2) > 0 {
                     EllersAlgo::vector_replace(curr, curr[x + 1], curr[x]);
-                    maze.rm_wall(x, y, Walls::Right);
-                    maze.rm_wall(x + 1, y, Walls::Left);
+                    maze.remove_wall(x, y, x + 1, y);
                 }
             }
         }
@@ -100,8 +98,7 @@ impl EllersAlgo {
             let ver_count = rng.gen_range(1, indices.len() + 1);
             for v in 0..ver_count {
                 curr[indices[v]] = prev[x];
-                maze.rm_wall(indices[v], y, Walls::Down);
-                maze.rm_wall(indices[v], y + 1, Walls::Up);
+                maze.remove_wall(indices[v], y, indices[v], y + 1);
             }
         }
     }

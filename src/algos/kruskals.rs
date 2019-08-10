@@ -20,13 +20,12 @@ impl KruskalsAlgo {
         }
         walls.shuffle(&mut rand::thread_rng());
         while !walls.is_empty() {
-            let (x, y, x2, y2, d) = walls.pop().unwrap();
+            let (x, y, x2, y2, _d) = walls.pop().unwrap();
             if uf.connected(&(x, y), &(x2, y2)) {
                 continue;
             }
             uf.join(&(x, y), &(x2, y2));
-            maze.rm_wall(x, y, d);
-            maze.rm_wall(x2, y2, d.opposite());
+            maze.remove_wall(x, y, x2, y2);
         }
         Ok(())
     }

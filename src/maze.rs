@@ -143,8 +143,12 @@ impl Maze {
         v
     }
 
-    pub fn rm_wall(&mut self, x: usize, y: usize, w: Walls) {
-        self.maze[y][x] &= !(w as i8);
+    pub fn remove_wall(&mut self, x: usize, y: usize, x2: usize, y2: usize) {
+        let (min_x, min_y) = std::cmp::min((x, y), (x2, y2));
+        let (max_x, max_y) = std::cmp::max((x, y), (x2, y2));
+        let wall = if min_x < max_x { Walls::Right } else { Walls::Down };
+        self.maze[min_y][min_x] &= !(wall as i8);
+        self.maze[max_y][max_x] &= !(wall.opposite() as i8);
     }
 }
 
