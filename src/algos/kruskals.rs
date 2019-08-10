@@ -13,14 +13,14 @@ impl KruskalsAlgo {
         let size = maze.get_size();
         for x in 0..size {
             for y in 0..size {
-                for (x2, y2, d) in maze.get_adjacent(x, y) {
-                    walls.push((x, y, x2, y2, d));
+                for (x2, y2) in maze.get_adjacent(x, y) {
+                    walls.push((x, y, x2, y2));
                 }
             }
         }
         walls.shuffle(&mut rand::thread_rng());
         while !walls.is_empty() {
-            let (x, y, x2, y2, _d) = walls.pop().unwrap();
+            let (x, y, x2, y2) = walls.pop().unwrap();
             if uf.connected(&(x, y), &(x2, y2)) {
                 continue;
             }

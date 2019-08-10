@@ -134,13 +134,13 @@ impl Maze {
     }
 
 
-    pub fn get_adjacent(&self, x: usize, y: usize) -> Vec<(usize, usize, Walls)> {
-        let mut v = vec![];
-        if x > 0 { v.push((x - 1, y, Walls::Left)); }
-        if y > 0 { v.push((x, y - 1, Walls::Up)); }
-        if x + 1 < self.size { v.push((x + 1, y, Walls::Right)); }
-        if y + 1 < self.size { v.push((x, y + 1, Walls::Down)); }
-        v
+    pub fn get_adjacent(&self, x: usize, y: usize) -> Vec<(usize, usize)> {
+        vec![
+            if x > 0 { Some((x - 1, y)) } else { None },
+            if y > 0 { Some((x, y - 1)) } else { None },
+            if x + 1 < self.size { Some((x + 1, y)) } else { None },
+            if y + 1 < self.size { Some((x, y + 1)) } else { None }
+        ].into_iter().flatten().collect()
     }
 
     pub fn remove_wall(&mut self, x: usize, y: usize, x2: usize, y2: usize) {

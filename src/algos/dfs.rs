@@ -1,20 +1,20 @@
 use rand::prelude::*;
 
 use crate::algos::algo;
-use crate::maze::{Maze, Walls};
+use crate::maze::Maze;
 
 pub struct DfsAlgo;
 
 impl DfsAlgo {
     fn dfs(maze: &mut Maze, visited: &mut Vec<Vec<bool>>,
            x: usize, y: usize) -> Result<(), String> {
-        let mut adj: Vec<(usize, usize, Walls)> = maze.get_adjacent(x, y)
+        let mut adj: Vec<(usize, usize)> = maze.get_adjacent(x, y)
             .into_iter()
-            .filter(|&(nx, ny, _)| !visited[nx][ny])
-            .collect::<Vec<(usize, usize, Walls)>>();
+            .filter(|&(nx, ny)| !visited[nx][ny])
+            .collect();
         adj.shuffle(&mut rand::thread_rng());
         while !adj.is_empty() {
-            let (nx, ny, _d) = adj.pop().unwrap();
+            let (nx, ny) = adj.pop().unwrap();
             if visited[nx][ny] {
                 continue;
             }

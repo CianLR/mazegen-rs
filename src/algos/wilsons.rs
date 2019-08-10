@@ -43,7 +43,7 @@ impl WilsonsAlgo {
         let mut adj = maze.get_adjacent(x, y);
         adj.shuffle(&mut rand::thread_rng());
         while !adj.is_empty() {
-            let (x2, y2, _d) = adj.pop().unwrap();
+            let (x2, y2) = adj.pop().unwrap();
             if x2 == px && y2 == py {
                 continue;  //  Don't move backwards.
             }
