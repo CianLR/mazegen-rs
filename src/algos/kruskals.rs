@@ -7,6 +7,10 @@ use crate::algos::util;
 pub struct KruskalsAlgo;
 
 impl KruskalsAlgo {
+    pub fn new() -> KruskalsAlgo {
+        KruskalsAlgo { }
+    }
+
     fn kruskals(maze: &mut Maze) -> Result<(), String> {
         let mut uf = util::UnionFind::new();
         let mut walls = vec![];
@@ -32,7 +36,7 @@ impl KruskalsAlgo {
 }
 
 impl algo::MazeAlgo for KruskalsAlgo {
-    fn generate(maze: &mut Maze) -> Result<(), String> {
+    fn generate(&mut self, maze: &mut Maze) -> Result<(), String> {
         KruskalsAlgo::kruskals(maze)
     }
 }

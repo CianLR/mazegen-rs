@@ -10,6 +10,10 @@ use crate::maze::Maze;
 pub struct EllersAlgo;
 
 impl EllersAlgo {
+    pub fn new() -> EllersAlgo {
+        EllersAlgo { }
+    }
+
     fn ellers(mut maze: &mut Maze) -> Result<(), String> {
         let size = maze.get_size();
         // These two vectors hold the current and previous rows of the maze.
@@ -105,7 +109,7 @@ impl EllersAlgo {
 }
 
 impl algo::MazeAlgo for EllersAlgo {
-    fn generate(maze: &mut Maze) -> Result<(), String> {
+    fn generate(&mut self, maze: &mut Maze) -> Result<(), String> {
         EllersAlgo::ellers(maze)
     }
 }

@@ -1,3 +1,5 @@
+use std::boxed::Box;
+use crate::algos::algo::MazeAlgo;
 
 #[derive(Copy, Clone)]
 pub enum Walls {
@@ -8,16 +10,8 @@ pub enum Walls {
 }
 
 impl Walls {
-    fn left(v: i8) -> bool {
-        v & Walls::Left as i8 != 0
-    }
-
     fn right(v: i8) -> bool {
         v & Walls::Right as i8 != 0
-    }
-
-    fn up(v: i8) -> bool {
-        v & Walls::Up as i8 != 0
     }
 
     fn down(v: i8) -> bool {
@@ -46,6 +40,11 @@ impl Maze {
                         Walls::Left as i8 | Walls::Right as i8;
         let m = vec![vec![all_walls; size]; size];
         Maze { size: size, maze: m }
+    }
+
+    pub fn apply_algorithm(&mut self,
+                           algo: &mut Box<MazeAlgo>) -> Result<(), String> {
+        algo.generate(self)
     }
 
     pub fn get_size(&self) -> usize {

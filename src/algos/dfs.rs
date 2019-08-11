@@ -6,6 +6,10 @@ use crate::maze::Maze;
 pub struct DfsAlgo;
 
 impl DfsAlgo {
+    pub fn new() -> DfsAlgo {
+        DfsAlgo { }
+    }
+
     fn dfs(maze: &mut Maze, visited: &mut Vec<Vec<bool>>,
            x: usize, y: usize) -> Result<(), String> {
         let mut adj: Vec<(usize, usize)> = maze.get_adjacent(x, y)
@@ -27,7 +31,7 @@ impl DfsAlgo {
 }
 
 impl algo::MazeAlgo for DfsAlgo {
-    fn generate(maze: &mut Maze) -> Result<(), String> {
+    fn generate(&mut self, maze: &mut Maze) -> Result<(), String> {
         let size = maze.get_size();
         let mut visited = vec![vec![false; size]; size];
         visited[size/2][size/2] = true;

@@ -4,7 +4,6 @@ extern crate clap;
 mod algos;
 mod maze;
 
-use algos::algo::MazeAlgo;
 use maze::Maze;
 use clap::{Arg, App};
 
@@ -33,18 +32,10 @@ fn get_args() -> clap::ArgMatches<'static> {
             .required(true)
             .takes_value(true)
             .help("Sets the size of the maze to be generated"))
+        .arg(Arg::with_name("animate")
+            .long("animate")
+            .help("Draw the process of creating the maze on screen"))
         .get_matches()
-}
-
-fn apply_algo(alg: &String, mut maze: &mut Maze) -> Result<(), String> {
-    match alg.as_ref() {
-        "dfs" => algos::dfs::DfsAlgo::generate(&mut maze),
-        "kruskals" => algos::kruskals::KruskalsAlgo::generate(&mut maze),
-        "wilsons" => algos::wilsons::WilsonsAlgo::generate(&mut maze),
-        "ellers" => algos::ellers::EllersAlgo::generate(&mut maze),
-        "prims" => algos::prims::PrimsAlgo::generate(&mut maze),
-        _ => Err("Algorithm not found".to_string()),
-    }
 }
 
 fn main() -> Result<(), String> {
@@ -53,7 +44,7 @@ fn main() -> Result<(), String> {
     let size = value_t!(args, "size", usize).unwrap_or_else(|e| e.exit());
 
     let mut m = Maze::new(size);
-    apply_algo(&algo, &mut m)?;
+    m.apply_algorithm(&mut algos::algo::get_algorithm(&algo)?)?;
     m.print();
     Ok(())
 }

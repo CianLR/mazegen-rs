@@ -6,6 +6,10 @@ use crate::maze::Maze;
 pub struct PrimsAlgo;
 
 impl PrimsAlgo {
+    pub fn new() -> PrimsAlgo {
+        PrimsAlgo { }
+    }
+
     fn prims(maze: &mut Maze) -> Result<(), String> {
         let size = maze.get_size();
         let mut rng = rand::thread_rng();
@@ -32,7 +36,7 @@ impl PrimsAlgo {
 }
 
 impl algo::MazeAlgo for PrimsAlgo {
-    fn generate(maze: &mut Maze) -> Result<(), String> {
+    fn generate(&mut self, maze: &mut Maze) -> Result<(), String> {
         PrimsAlgo::prims(maze)
     }
 }

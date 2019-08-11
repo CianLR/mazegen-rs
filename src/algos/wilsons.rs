@@ -13,6 +13,10 @@ enum CellInfo {
 }
 
 impl WilsonsAlgo {
+    pub fn new() -> WilsonsAlgo {
+        WilsonsAlgo { }
+    }
+
     fn wilsons(mut maze: &mut Maze) -> Result<(), String> {
         let size = maze.get_size();
         let mut cells = vec![vec![CellInfo::Blank; size]; size];
@@ -67,7 +71,7 @@ impl WilsonsAlgo {
 }
 
 impl algo::MazeAlgo for WilsonsAlgo {
-    fn generate(maze: &mut Maze) -> Result<(), String> {
+    fn generate(&mut self, maze: &mut Maze) -> Result<(), String> {
         WilsonsAlgo::wilsons(maze)
     }
 }
