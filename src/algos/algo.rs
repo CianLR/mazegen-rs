@@ -7,9 +7,9 @@ pub trait MazeAlgo {
     fn generate(&mut self, maze: &mut Maze) -> Result<(), String>;
 }
 
-pub fn get_algorithm(algo: &String) -> Result<Box<MazeAlgo>, String> {
+pub fn get_algorithm(algo: &String, ani: bool) -> Result<Box<MazeAlgo>, String> {
     match algo.as_ref() {
-        "dfs" => Ok(Box::new(DfsAlgo::new())),
+        "dfs" => Ok(Box::new(DfsAlgo::new(ani))),
         "kruskals" => Ok(Box::new(KruskalsAlgo::new())),
         "wilsons" => Ok(Box::new(WilsonsAlgo::new())),
         "ellers" => Ok(Box::new(EllersAlgo::new())),

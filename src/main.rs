@@ -42,9 +42,11 @@ fn main() -> Result<(), String> {
     let args = get_args();
     let algo = args.value_of("algorithm").unwrap().to_string();
     let size = value_t!(args, "size", usize).unwrap_or_else(|e| e.exit());
+    let animate = args.is_present("animate");
 
     let mut m = Maze::new(size);
-    m.apply_algorithm(&mut algos::get_algorithm(&algo)?)?;
+    let mut a = algos::get_algorithm(&algo, animate)?;
+    m.apply_algorithm(&mut a)?;
     m.print();
     Ok(())
 }
