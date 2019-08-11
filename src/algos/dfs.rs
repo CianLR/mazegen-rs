@@ -16,9 +16,7 @@ impl DfsAlgo {
 
     fn frame(&self, maze: &Maze) {
         if self.animate {
-            maze.print();
-            // Reset cursor to first line of the maze
-            println!("\x1b[{}F", maze.get_size() + 2);
+            maze.print_and_reset();
             sleep(Duration::from_millis(20));
         }
     }

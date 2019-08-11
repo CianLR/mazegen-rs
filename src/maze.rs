@@ -51,6 +51,12 @@ impl Maze {
         self.size
     }
 
+    pub fn print_and_reset(&self) {
+        self.print();
+        // Reset cursor to first line of the maze
+        println!("\x1b[{}F", self.size + 2);
+    }
+
     pub fn print(&self) {
         // Top row
         let mut top = "┏━".to_string();

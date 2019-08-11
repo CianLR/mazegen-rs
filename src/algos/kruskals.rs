@@ -1,17 +1,28 @@
+use std::thread::sleep;
+use std::time::Duration;
 use rand::prelude::*;
 
 use crate::algos::algo;
 use crate::maze::Maze;
 use crate::algos::util;
 
-pub struct KruskalsAlgo;
+pub struct KruskalsAlgo {
+    animate: bool
+}
 
 impl KruskalsAlgo {
-    pub fn new() -> KruskalsAlgo {
-        KruskalsAlgo { }
+    pub fn new(animate: bool) -> KruskalsAlgo {
+        KruskalsAlgo { animate: animate }
     }
 
-    fn kruskals(maze: &mut Maze) -> Result<(), String> {
+    fn frame(&self, maze: &Maze) {
+        if self.animate {
+            maze.print_and_reset();
+            sleep(Duration::from_millis(20));
+        }
+    }
+
+    fn kruskals(&self, maze: &mut Maze) -> Result<(), String> {
         let mut uf = util::UnionFind::new();
         let mut walls = vec![];
         let size = maze.get_size();
@@ -29,6 +40,7 @@ impl KruskalsAlgo {
                 continue;
             }
             uf.join(&(x, y), &(x2, y2));
+            self.frame(maze);
             maze.remove_wall(x, y, x2, y2);
         }
         Ok(())
@@ -37,6 +49,6 @@ impl KruskalsAlgo {
 
 impl algo::MazeAlgo for KruskalsAlgo {
     fn generate(&mut self, maze: &mut Maze) -> Result<(), String> {
-        KruskalsAlgo::kruskals(maze)
+        self.kruskals(maze)
     }
 }
