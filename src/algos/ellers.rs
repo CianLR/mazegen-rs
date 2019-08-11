@@ -16,14 +16,11 @@ impl EllersAlgo {
 
     fn ellers(mut maze: &mut Maze) -> Result<(), String> {
         let size = maze.get_size();
-        // These two vectors hold the current and previous rows of the maze.
-        let mut prev = vec![];
+        // This vector holds the current row of the maze.
         let mut curr = (1..(size + 1)).collect();
-        // These references will be swapped back and forth, avoiding
-        // unnecessary copying.
         for y in 0..(size - 1) {
             EllersAlgo::join_adjacent(&mut maze, &mut curr, y);
-            prev = curr;
+            let prev = curr;
             curr = vec![0; size];
             EllersAlgo::make_verticals(&mut maze, &prev, &mut curr, y);
         }
