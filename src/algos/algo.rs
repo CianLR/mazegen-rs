@@ -7,10 +7,6 @@ pub trait MazeAlgo {
     fn generate(&mut self, maze: &mut Maze) -> Result<(), String>;
 }
 
-pub trait MazeAlgo2 {
-    fn generate(maze: &mut Maze) -> Result<(), String>;
-}
-
 pub fn get_algorithm(algo: &String) -> Result<Box<MazeAlgo>, String> {
     match algo.as_ref() {
         "dfs" => Ok(Box::new(DfsAlgo::new())),
