@@ -1,16 +1,18 @@
 use rand::prelude::*;
 
-use crate::algos::algo;
+use crate::algos::algo::MazeAlgo;
 use crate::maze::Maze;
 
-pub struct PrimsAlgo;
+pub struct PrimsAlgo {
+    animate: bool,
+}
 
 impl PrimsAlgo {
-    pub fn new() -> PrimsAlgo {
-        PrimsAlgo { }
+    pub fn new(animate: bool) -> PrimsAlgo {
+        PrimsAlgo { animate: animate }
     }
 
-    fn prims(maze: &mut Maze) -> Result<(), String> {
+    fn prims(&self, maze: &mut Maze) -> Result<(), String> {
         let size = maze.get_size();
         let mut rng = rand::thread_rng();
         let mut in_maze = vec![vec![false; size]; size];
@@ -25,6 +27,9 @@ impl PrimsAlgo {
                 continue;  // Already connected.
             }
             in_maze[x2][y2] = true;
+            if self.animate {
+                self.frame(maze, 20);
+            }
             maze.remove_wall(x, y, x2, y2);
             walls.extend(maze.get_adjacent(x2, y2)
                 .into_iter()
@@ -35,8 +40,8 @@ impl PrimsAlgo {
     }
 }
 
-impl algo::MazeAlgo for PrimsAlgo {
+impl MazeAlgo for PrimsAlgo {
     fn generate(&mut self, maze: &mut Maze) -> Result<(), String> {
-        PrimsAlgo::prims(maze)
+        self.prims(maze)
     }
 }

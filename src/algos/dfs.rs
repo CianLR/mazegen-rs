@@ -1,8 +1,6 @@
-use std::thread::sleep;
-use std::time::Duration;
 use rand::prelude::*;
 
-use crate::algos::algo;
+use crate::algos::algo::MazeAlgo;
 use crate::maze::Maze;
 
 pub struct DfsAlgo {
@@ -12,13 +10,6 @@ pub struct DfsAlgo {
 impl DfsAlgo {
     pub fn new(animate: bool) -> DfsAlgo {
         DfsAlgo { animate: animate }
-    }
-
-    fn frame(&self, maze: &Maze) {
-        if self.animate {
-            maze.print_and_reset();
-            sleep(Duration::from_millis(20));
-        }
     }
 
     fn dfs(&self, maze: &mut Maze, visited: &mut Vec<Vec<bool>>,
@@ -33,7 +24,9 @@ impl DfsAlgo {
             if visited[nx][ny] {
                 continue;
             }
-            self.frame(maze);
+            if self.animate {
+                self.frame(maze, 20);
+            }
             maze.remove_wall(x, y, nx, ny);
             visited[nx][ny] = true;
             self.dfs(maze, visited, nx, ny)?;
@@ -42,7 +35,7 @@ impl DfsAlgo {
     }
 }
 
-impl algo::MazeAlgo for DfsAlgo {
+impl MazeAlgo for DfsAlgo {
     fn generate(&mut self, maze: &mut Maze) -> Result<(), String> {
         let size = maze.get_size();
         let mut visited = vec![vec![false; size]; size];

@@ -1,9 +1,7 @@
 use rand::prelude::*;
 
-use crate::algos::algo;
+use crate::algos::algo::MazeAlgo;
 use crate::maze::Maze;
-
-pub struct WilsonsAlgo;
 
 #[derive(Clone, PartialEq)]
 enum CellInfo {
@@ -12,12 +10,16 @@ enum CellInfo {
     InMaze,
 }
 
+pub struct WilsonsAlgo {
+    animate: bool
+}
+
 impl WilsonsAlgo {
-    pub fn new() -> WilsonsAlgo {
-        WilsonsAlgo { }
+    pub fn new(animate: bool) -> WilsonsAlgo {
+        WilsonsAlgo { animate: animate }
     }
 
-    fn wilsons(mut maze: &mut Maze) -> Result<(), String> {
+    fn wilsons(&self, mut maze: &mut Maze) -> Result<(), String> {
         let size = maze.get_size();
         let mut cells = vec![vec![CellInfo::Blank; size]; size];
         cells[0][0] = CellInfo::InMaze;
@@ -26,6 +28,7 @@ impl WilsonsAlgo {
                 if x == 1 && y == 1 {
                     continue;
                 }
+                if self.animate { self.frame(maze, 20); }
                 let a = WilsonsAlgo::walk(&mut maze, &mut cells, x, y, x, y);
                 if a.is_some() {
                     // This should be impossible... I think.
@@ -70,8 +73,8 @@ impl WilsonsAlgo {
     }
 }
 
-impl algo::MazeAlgo for WilsonsAlgo {
+impl MazeAlgo for WilsonsAlgo {
     fn generate(&mut self, maze: &mut Maze) -> Result<(), String> {
-        WilsonsAlgo::wilsons(maze)
+        self.wilsons(maze)
     }
 }
