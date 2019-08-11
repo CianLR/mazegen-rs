@@ -23,7 +23,7 @@ fn get_args() -> clap::ArgMatches<'static> {
             .index(1)
             .required(true)
             .takes_value(true)
-            .possible_values(&algos::algo::ALGORITHMS)
+            .possible_values(&algos::ALGORITHMS)
             .help("Sets the algorithm used to generate the maze"))
         .arg(Arg::with_name("size")
             .short("s")
@@ -44,7 +44,7 @@ fn main() -> Result<(), String> {
     let size = value_t!(args, "size", usize).unwrap_or_else(|e| e.exit());
 
     let mut m = Maze::new(size);
-    m.apply_algorithm(&mut algos::algo::get_algorithm(&algo)?)?;
+    m.apply_algorithm(&mut algos::get_algorithm(&algo)?)?;
     m.print();
     Ok(())
 }

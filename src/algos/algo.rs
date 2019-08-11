@@ -13,11 +13,11 @@ pub trait MazeAlgo2 {
 
 pub fn get_algorithm(algo: &String) -> Result<Box<MazeAlgo>, String> {
     match algo.as_ref() {
-        "dfs" => Ok(Box::new(dfs::DfsAlgo::new())),
-        "kruskals" => Ok(Box::new(kruskals::KruskalsAlgo::new())),
-        "wilsons" => Ok(Box::new(wilsons::WilsonsAlgo::new())),
-        "ellers" => Ok(Box::new(ellers::EllersAlgo::new())),
-        "prims" => Ok(Box::new(prims::PrimsAlgo::new())),
+        "dfs" => Ok(Box::new(DfsAlgo::new())),
+        "kruskals" => Ok(Box::new(KruskalsAlgo::new())),
+        "wilsons" => Ok(Box::new(WilsonsAlgo::new())),
+        "ellers" => Ok(Box::new(EllersAlgo::new())),
+        "prims" => Ok(Box::new(PrimsAlgo::new())),
         _ => Err("Algorithm not found".to_string()),
     }
 }

@@ -1,5 +1,5 @@
 use std::boxed::Box;
-use crate::algos::algo::MazeAlgo;
+use crate::algos::MazeAlgo;
 
 #[derive(Copy, Clone)]
 pub enum Walls {
