@@ -43,3 +43,15 @@ impl MazeAlgo for DfsAlgo {
         self.dfs(maze, &mut visited, size/2, size/2)
     }
 }
+
+
+#[cfg(test)]
+mod test {
+    use crate::algos::test_util::*;
+
+    #[test]
+    fn test_is_perfect() {
+        let m = apply_test_algo("dfs");
+        assert!(is_perfect_maze(&m));
+    }
+}

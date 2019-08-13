@@ -78,3 +78,15 @@ impl MazeAlgo for WilsonsAlgo {
         self.wilsons(maze)
     }
 }
+
+
+#[cfg(test)]
+mod test {
+    use crate::algos::test_util::*;
+
+    #[test]
+    fn test_is_perfect() {
+        let m = apply_test_algo("wilsons");
+        assert!(is_perfect_maze(&m));
+    }
+}

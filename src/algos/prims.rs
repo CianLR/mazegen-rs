@@ -45,3 +45,15 @@ impl MazeAlgo for PrimsAlgo {
         self.prims(maze)
     }
 }
+
+
+#[cfg(test)]
+mod test {
+    use crate::algos::test_util::*;
+
+    #[test]
+    fn test_is_perfect() {
+        let m = apply_test_algo("prims");
+        assert!(is_perfect_maze(&m));
+    }
+}

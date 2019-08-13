@@ -10,8 +10,16 @@ pub enum Walls {
 }
 
 impl Walls {
+    fn left(v: i8) -> bool {
+        v & Walls::Left as i8 != 0
+    }
+    
     fn right(v: i8) -> bool {
         v & Walls::Right as i8 != 0
+    }
+    
+    fn up(v: i8) -> bool {
+        v & Walls::Up as i8 != 0
     }
 
     fn down(v: i8) -> bool {
@@ -133,6 +141,24 @@ impl Maze {
         ].into_iter().flatten().collect()
     }
 
+    pub fn get_open_adj(&self, x: usize, y: usize) -> Vec<(usize, usize)> {
+        let c = self.maze[y][x];
+        vec![
+            if x > 0 && !Walls::left(c) { Some((x - 1, y)) } else { None },
+            if y > 0 && !Walls::up(c) { Some((x, y - 1)) } else { None },
+            if x + 1 < self.size && !Walls::right(c) {
+                Some((x + 1, y))
+            } else {
+                None
+            },
+            if y + 1 < self.size && !Walls::down(c) {
+                Some((x, y + 1))
+            } else {
+                None
+            }
+        ].into_iter().flatten().collect()
+    }
+
     pub fn remove_wall(&mut self, x: usize, y: usize, x2: usize, y2: usize) {
         let (min_x, min_y) = std::cmp::min((x, y), (x2, y2));
         let (max_x, max_y) = std::cmp::max((x, y), (x2, y2));
@@ -141,4 +167,3 @@ impl Maze {
         self.maze[max_y][max_x] &= !(wall.opposite() as i8);
     }
 }
-
