@@ -1,6 +1,7 @@
 use crate::algos::get_algorithm;
 use crate::maze::Maze;
 
+#[allow(dead_code)]
 pub fn apply_test_algo(algo: &str) -> Maze {
     let size = 50;
     let mut m = Maze::new(size);
@@ -9,6 +10,7 @@ pub fn apply_test_algo(algo: &str) -> Maze {
     m
 }
 
+#[allow(dead_code)]
 pub fn is_perfect_maze(maze: &Maze) -> bool {
     let size = maze.get_size();
     let mut seen = vec![vec![false; size]; size];
