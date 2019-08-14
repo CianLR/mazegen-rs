@@ -20,16 +20,12 @@ fn get_args() -> clap::ArgMatches<'static> {
         .arg(Arg::with_name("algorithm")
             .short("a")
             .long("algorithm")
-            .index(1)
-            .required(true)
             .takes_value(true)
             .possible_values(&algos::ALGORITHMS)
             .help("Sets the algorithm used to generate the maze"))
         .arg(Arg::with_name("size")
             .short("s")
             .long("size")
-            .index(2)
-            .required(true)
             .takes_value(true)
             .help("Sets the size of the maze to be generated"))
         .arg(Arg::with_name("animate")
@@ -40,8 +36,8 @@ fn get_args() -> clap::ArgMatches<'static> {
 
 fn main() -> Result<(), String> {
     let args = get_args();
-    let algo = args.value_of("algorithm").unwrap().to_string();
-    let size = value_t!(args, "size", usize).unwrap_or_else(|e| e.exit());
+    let algo = args.value_of("algorithm").unwrap_or("dfs").to_string();
+    let size = value_t!(args, "size", usize).unwrap_or(15);
     let animate = args.is_present("animate");
 
     let mut m = Maze::new(size);
