@@ -16,7 +16,7 @@ To build run the following from the root directory:
 cargo build
 ```
 
-# To Test
+## Testing
 
 Tests can be run with the following command:
 
@@ -26,10 +26,16 @@ cargo test
 
 ## Running
 
-To generate a 15x15 maze build the project and then run:
+To generate a maze run:
 
 ```
-cargo run dfs 15
+cargo run
+```
+
+To specify a 15x15 maze generated with the DFS algorithm run:
+
+```
+cargo run -- -s 15 -a dfs
 ```
 
 Output:
